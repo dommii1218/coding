@@ -26,3 +26,20 @@ WHEN continent IN ('North America', 'South America', 'Caribbean') THEN 'America'
 ELSE continent END
 FROM world
 WHERE name LIKE 'A%' OR name LIKE 'B%'
+
+--10. 顯示萬億元國家的人均國內生產總值，四捨五入到最近的$1000。
+SELECT name, round(gdp/population, -3)
+FROM world
+WHERE gdp >= 1000000000000
+
+--13. Put the continents right... Oceania becomes Australasia; Countries in Eurasia and Turkey go to Europe/Asia; Caribbean islands starting with 'B' go to North America, other Caribbean islands go to South America. Show the name, the original continent and the new continent of all countries.
+SELECT name, continent,
+       CASE WHEN continent = 'Oceania' THEN 'Australasia'
+            WHEN continent = 'Eurasia' THEN 'Europe/Asia'
+            WHEN name = 'Turkey' THEN 'Europe/Asia'
+            WHEN continent ='Caribbean' AND continent LIKE 'B%' THEN 'North America'
+            WHEN continent ='Caribbean' THEN 'South America' 
+            ELSE continent END
+FROM world
+ORDER BY name
+
