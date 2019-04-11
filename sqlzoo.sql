@@ -47,14 +47,14 @@ ORDER BY name
 --Show the 1984 winners and subject ordered by subject and winner name; but list Chemistry and Physics last.
 SELECT winner, subject
 FROM nobel
-WHERE yr=1984
+WHERE yr = 1984
 ORDER BY subject IN ('Physics','Chemistry'), subject, winner
 
 --5. 顯示歐洲的國家名稱name和每個國家的人口population。以德國的人口的百分比作人口顯示。
 SELECT name,
 CONCAT(ROUND(population/(SELECT population FROM world WHERE name = 'Germany')*100,0), '%')
 FROM world
-WHERE continent  = 'Europe'
+WHERE continent = 'Europe'
 
 --6. 哪些國家的GDP比Europe歐洲的全部國家都要高呢? [只需列出 name 。] (有些國家的記錄中，GDP是NULL，沒有填入資料的。)
 SELECT name
@@ -78,4 +78,26 @@ WHERE w.continent = maxw.continent AND w.area=maxw.area
 SELECT w.continent,w.name,w.area 
 FROM world AS w,
            (SELECT MAX(area) AS area FROM world GROUP BY continent) AS maxw
-WHERE w.area=maxw.area
+WHERE w.area = maxw.area
+
+--8. 列出洲份名稱，和每個洲份中國家名字按子母順序是排首位的國家名。(即每洲只有列一國)
+SELECT continent, name
+FROM world AS w1
+WHERE name = (SELECT name FROM world AS w2 
+              WHERE w1.continent = w2.continent 
+              ORDER BY name LIMIT 1)
+
+--9. 找出洲份，當中全部國家都有少於或等於 25000000 人口. 在這些洲份中，列出國家名字name，continent 洲份和population人口。
+SELECT name, continent, population
+FROM world AS w1
+WHERE 25000000 >= ALL(SELECT population FROM world AS w2 
+                      WHERE w1.continent = w2.continent 
+                      AND population IS NOT NULL)
+
+--10. 有些國家的人口是同洲份的所有其他國的3倍或以上。列出 國家名字name 和 洲份 continent。
+SELECT name, continent
+FROM world AS w1
+WHERE population/3 >= ALL(SELECT population FROM world AS w2 
+                          WHERE w1.continent = w2.continent 
+                          AND NOT w1.population = w2.population 
+                          AND population IS NOT NULL)
