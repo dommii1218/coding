@@ -21,9 +21,9 @@ WHERE capital LIKE Concat('%', name, '%_')
 
 --12. Show the name and the continent - but substitute Eurasia for Europe and Asia; substitute America - for each country in North America or South America or Caribbean. Show countries beginning with A or B
 SELECT name, 
-CASE WHEN continent IN ('Europe', 'Asia') THEN 'Eurasia'
-WHEN continent IN ('North America', 'South America', 'Caribbean') THEN 'America'
-ELSE continent END
+       CASE WHEN continent IN ('Europe', 'Asia') THEN 'Eurasia'
+            WHEN continent IN ('North America', 'South America', 'Caribbean') THEN 'America'
+            ELSE continent END
 FROM world
 WHERE name LIKE 'A%' OR name LIKE 'B%'
 
@@ -52,7 +52,7 @@ ORDER BY subject IN ('Physics','Chemistry'), subject, winner
 
 --5. 顯示歐洲的國家名稱name和每個國家的人口population。以德國的人口的百分比作人口顯示。
 SELECT name,
-CONCAT(ROUND(population/(SELECT population FROM world WHERE name = 'Germany')*100,0), '%')
+       CONCAT(ROUND(population/(SELECT population FROM world WHERE name = 'Germany')*100,0), '%')
 FROM world
 WHERE continent = 'Europe'
 
@@ -71,13 +71,13 @@ WHERE area >= ALL(SELECT area FROM world AS w2
 --Method 2  
 SELECT w.continent,w.name,w.area 
 FROM world AS w,
-           (SELECT continent, MAX(area) AS area FROM world GROUP BY continent) AS maxw
+     (SELECT continent, MAX(area) AS area FROM world GROUP BY continent) AS maxw
 WHERE w.continent = maxw.continent AND w.area=maxw.area
 
 --OR OMIT continent
 SELECT w.continent,w.name,w.area 
 FROM world AS w,
-           (SELECT MAX(area) AS area FROM world GROUP BY continent) AS maxw
+     (SELECT MAX(area) AS area FROM world GROUP BY continent) AS maxw
 WHERE w.area = maxw.area
 
 --8. 列出洲份名稱，和每個洲份中國家名字按子母順序是排首位的國家名。(即每洲只有列一國)
