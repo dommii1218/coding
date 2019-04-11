@@ -9,7 +9,7 @@ SELECT name
 FROM world
 WHERE capital LIKE concat(name, ' City')
 
---14.找出所有首都和其國家名字,而首都是國家名字的延伸。你應顯示Mexico City,因它比其國家名字Mexico長。你不應顯示Luxembourg,因它的首都和國家名相是相同的。
+--14. 找出所有首都和其國家名字,而首都是國家名字的延伸。你應顯示Mexico City,因它比其國家名字Mexico長。你不應顯示Luxembourg,因它的首都和國家名相是相同的。
 SELECT name, capital
 FROM world
 WHERE capital LIKE Concat('%', name, '%_')
