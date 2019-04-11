@@ -43,3 +43,33 @@ SELECT name, continent,
 FROM world
 ORDER BY name
 
+--14. The expression subject IN ('Chemistry','Physics') can be used as a value - it will be 0 or 1.
+--Show the 1984 winners and subject ordered by subject and winner name; but list Chemistry and Physics last.
+SELECT winner, subject
+FROM nobel
+WHERE yr=1984
+ORDER BY subject IN ('Physics','Chemistry'), subject, winner
+
+--5. 顯示歐洲的國家名稱name和每個國家的人口population。以德國的人口的百分比作人口顯示。
+SELECT name,
+CONCAT(ROUND(population/(SELECT population FROM world WHERE name = 'Germany')*100,0), '%')
+FROM world
+WHERE continent  = 'Europe'
+
+--6. 哪些國家的GDP比Europe歐洲的全部國家都要高呢? [只需列出 name 。] (有些國家的記錄中，GDP是NULL，沒有填入資料的。)
+SELECT name
+FROM world
+WHERE gdp > ALL(SELECT gdp FROM world WHERE continent = 'Europe' AND gdp IS NOT NULL)
+
+--7. 在每一個州中找出最大面積的國家，列出洲份 continent, 國家名字 name 及面積 area。 (有些國家的記錄中，AREA是NULL，沒有填入資料的。)
+--Method 1
+SELECT continent, name, area
+FROM world AS w1
+WHERE area >= ALL(SELECT area FROM world AS w2
+                  WHERE w1.continent = w2.continent
+                  AND area IS NOT NULL)
+--Method 2               
+SELECT w.continent,w.name,w.area 
+FROM world AS w,
+           (SELECT MAX(area) AS area FROM world GROUP BY continent) AS maxw
+WHERE w.area=maxw.area
