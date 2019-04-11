@@ -68,7 +68,13 @@ FROM world AS w1
 WHERE area >= ALL(SELECT area FROM world AS w2
                   WHERE w1.continent = w2.continent
                   AND area IS NOT NULL)
---Method 2               
+--Method 2  
+SELECT w.continent,w.name,w.area 
+FROM world AS w,
+           (SELECT continent, MAX(area) AS area FROM world GROUP BY continent) AS maxw
+WHERE w.continent = maxw.continent AND w.area=maxw.area
+
+--OR OMIT continent
 SELECT w.continent,w.name,w.area 
 FROM world AS w,
            (SELECT MAX(area) AS area FROM world GROUP BY continent) AS maxw
