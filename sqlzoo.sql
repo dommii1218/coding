@@ -99,5 +99,5 @@ SELECT name, continent
 FROM world AS w1
 WHERE population/3 >= ALL(SELECT population FROM world AS w2 
                           WHERE w1.continent = w2.continent 
-                          AND NOT w1.population = w2.population 
+                          AND w1.population != w2.population 
                           AND population IS NOT NULL)
