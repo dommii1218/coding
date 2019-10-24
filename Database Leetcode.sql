@@ -18,4 +18,4 @@ FROM Person
 GROUP BY Email
 HAVING COUNT(*) > 1;
 
---196. \br{Delete} Duplicate Emails
+--196. Delete Duplicate Emails
