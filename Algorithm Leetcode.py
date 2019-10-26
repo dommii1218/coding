@@ -90,3 +90,24 @@ class Solution:
             i += 1
                     
         return prefix
+    
+*********************************************************
+##20. Valid Parentheses
+class Solution:
+    def __init__(self):
+        self.stack = []
+        self.dic = {")":"(", "}":"{" , "]":"["}
+        self.checker = [")","}","]"]
+    def isValid(self, S):
+        if len(S) % 2 != 0:
+            return False
+        for i in range(len(S)):
+            if S[i] is '(' or S[i] is '{' or S[i] is '[':
+                self.stack.append(S[i])
+            elif S[i] in self.checker:
+                if self.dic[S[i]] not in self.stack:
+                    return False
+                if self.stack[-1] != self.dic[S[i]]:
+                    return False
+                self.stack.pop(-1)
+        return len(self.stack) == 0
