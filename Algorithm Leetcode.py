@@ -55,3 +55,38 @@ class Solution:
 
 *********************************************************
 ##13. Roman to Integer
+class Solution:
+    def romanToInt(self, s: str) -> int:
+        roman = {'I': 1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000}
+        
+        sums = 0
+        minus = 0
+        
+        for i in range(len(s)-1):
+            if roman[s[i]] < roman [s[i+1]]:
+                minus += roman[s[i]]
+            sums += roman[s[i]]
+        
+        result = sums - 2*minus + roman[s[-1]]
+        
+        return result
+
+*********************************************************
+##14. Longest Common Prefix
+class Solution:
+    def longestCommonPrefix(self, strs: List[str]) -> str:
+        
+        n = len(strs)
+        
+        min_str = min(strs, key = len, default = "")    ##which.min
+        min_len = len(min_str)
+
+        i = 0
+        prefix = ""
+        while i < min_len:
+            if all(items[i] == min_str[i] for items in strs) == False:
+                break
+            prefix = prefix + min_str[i]
+            i += 1
+                    
+        return prefix
