@@ -111,3 +111,62 @@ class Solution:
                     return False
                 self.stack.pop(-1)
         return len(self.stack) == 0
+
+*********************************************************
+##21. Merge Two Sorted Lists
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if l1 is None:
+            return l2
+        if l2 is None: 
+            return l1
+        if l1 is None and l2 is None:
+            return None
+        
+        if l1.val <= l2.val:
+            dummy = ListNode(l1.val)
+            dummy.next = self.mergeTwoLists(l1.next, l2)
+        else:
+            dummy = ListNode(l2.val)
+            dummy.next = self.mergeTwoLists(l1, l2.next)
+        
+        return dummy
+    
+*********************************************************
+##26. Remove Duplicates from Sorted Array
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        
+        j = 0
+        
+        for i in range(len(nums)):
+            if nums[i] > nums[j]:
+                j += 1                
+                nums[j] = nums[i]
+                
+        return j+1
+    
+*********************************************************
+##27. Remove Element
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        
+        j = len(nums)-1
+        
+        for i in reversed(range(len(nums))):
+            if nums[i] == val:
+                
+                temp = nums[i]
+                nums[i] = nums[j]
+                nums[j] = temp
+                
+                j -= 1
+                
+        return j+1
+    
