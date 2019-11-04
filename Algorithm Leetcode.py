@@ -170,3 +170,75 @@ class Solution:
                 
         return j+1
     
+*********************************************************
+##strStr()
+##bruce force:
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        
+        if needle == "":
+            return 0
+
+        j = 0
+        i = 0
+        
+        while i < len(haystack):
+            
+            if needle[j] == haystack[i]:
+                j += 1
+                if j == len(needle):
+                    return i - j + 1
+                    break
+            else: 
+                i = i - j
+                j = 0
+                    
+            i += 1
+        
+        return -1
+
+#########################################
+##KMF (Knuth Morris Pratt) Algorithm
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        
+        if needle == "":
+            return 0
+        ##KMP Algorithm: O(m+n)
+        
+        ##needle dictionary : O(m)
+        m = len(needle)
+        dic = [0]*m
+        lps = 0    #length of postfix or suffix
+        i = 1    #dic[0] == 0, start from index 1
+        
+        while i < m:
+            if needle[i] == needle[lps]:
+                lps += 1
+                dic[i] = lps
+                i += 1
+            else:
+                if lps != 0:
+                    lps = dic[lps-1]
+                else:
+                    dic[i] = 0
+                    i += 1
+                    
+        ##pattern matching: O(n)
+        n = len(haystack)
+        i = 0
+        j = 0
+        while i < n:
+            if haystack[i] == needle[j]:
+                i += 1
+                j += 1
+                if j == m:
+                    return i-j
+                    break
+            else:
+                if j != 0:
+                    j = dic[j-1]
+                else:
+                    i += 1
+            
+        return -1
