@@ -306,3 +306,25 @@ class Solution:
         for j in range(1,len(nums)):
             OPT[j] = max(OPT[j-1]+nums[j], nums[j])     
         return max(OPT) 
+
+*********************************************************
+##66. Plus One
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        i = len(digits) - 1
+        while i >= 0:
+            if digits[i] == 9:
+                digits[i] = 0
+            else:
+                digits[i] += 1
+                break
+                return digits
+            i -= 1
+        
+        if digits[0] == 0:
+            digits.insert(0, 1)
+        
+        return digits
+    
+*********************************************************
+##67. Add Binary
