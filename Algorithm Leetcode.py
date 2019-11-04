@@ -204,22 +204,22 @@ class Solution:
         
         if needle == "":
             return 0
-        ##KMP Algorithm: O(m+n)
+        ##KMP Algorithm
         
         ##needle dictionary : O(m)
         m = len(needle)
         dic = [0]*m
-        lps = 0    #length of postfix or suffix
+        j = 0    #length of postfix or suffix
         i = 1    #dic[0] == 0, start from index 1
         
         while i < m:
-            if needle[i] == needle[lps]:
-                lps += 1
-                dic[i] = lps
+            if needle[i] == needle[j]:
+                j += 1
+                dic[i] = j
                 i += 1
             else:
-                if lps != 0:
-                    lps = dic[lps-1]
+                if j != 0:
+                    j = dic[j-1]
                 else:
                     dic[i] = 0
                     i += 1
