@@ -171,7 +171,7 @@ class Solution:
         return j+1
     
 *********************************************************
-##strStr()
+##28. Implement strStr()
 ##bruce force:
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
@@ -242,3 +242,67 @@ class Solution:
                     i += 1
             
         return -1
+    
+*********************************************************
+##35. Search Insert Position
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        left = 0
+        right = len(nums) - 1
+        
+        while right - left > 1:
+            mid = (left + right) // 2
+            
+            if target == nums[mid]:
+                return mid
+            elif target < nums[mid]:
+                right = mid - 1
+            else:
+                left = mid + 1
+        
+        if target <= nums[left]:
+            return left
+        elif target <= nums[right]:
+            return right
+        else:
+            return right + 1 
+        
+*********************************************************
+##38. Count and Say
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        seq = "1"
+        for i in range(n-1):
+            seq = self.generate(seq)
+        return seq
+    
+    def generate(self, seq: str) -> str:
+        i = 0
+        count = 1
+        r = ""
+        while i < (len(seq)-1):
+            if seq[i+1] == seq[i]:
+                count += 1
+            else:
+                r += str(count) + seq[i]
+                count = 1
+            i += 1
+        return r + str(count) + seq[-1]
+    
+*********************************************************
+##53. Maximum Subarray
+'''
+Kadane’s Algorithm:
+
+Let OPT(j) = max{OPT(j-1)+A[j], A[j]}, OPT(j) = max sum of subarray ending at j.
+The maximum sum is max{OPT(j)} for all 1 <= j <= n.
+Boundary condition: OPT(0) = A[0].
+There is n+1 subproblems, each requiring O(1) time in a bottom-up computation. Hence T(n) = O(n).
+'''
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        OPT = [None]*len(nums)
+        OPT[0] = nums[0]
+        for j in range(1,len(nums)):
+            OPT[j] = max(OPT[j-1]+nums[j], nums[j])     
+        return max(OPT) 
