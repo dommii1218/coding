@@ -94,23 +94,24 @@ class Solution:
 *********************************************************
 ##20. Valid Parentheses
 class Solution:
-    def __init__(self):
-        self.stack = []
-        self.dic = {")":"(", "}":"{" , "]":"["}
-        self.checker = [")","}","]"]
-    def isValid(self, S):
-        if len(S) % 2 != 0:
+    def isValid(self, s: str) -> bool:
+        stack = []
+        dic = {")":"(", "]":"[","}":"{"}
+        left = ["(", "[", "{"]
+        
+        if len(s) % 2 != 0:
             return False
-        for i in range(len(S)):
-            if S[i] is '(' or S[i] is '{' or S[i] is '[':
-                self.stack.append(S[i])
-            elif S[i] in self.checker:
-                if self.dic[S[i]] not in self.stack:
-                    return False
-                if self.stack[-1] != self.dic[S[i]]:
-                    return False
-                self.stack.pop(-1)
-        return len(self.stack) == 0
+        else:
+            for i in range(len(s)):
+                if s[i] in left:
+                    stack.append(s[i])
+                else:
+                    if dic[s[i]] not in stack or dic[s[i]] != stack[-1]:
+                        return False
+                    else:
+                        stack.pop(-1)
+            
+            return len(stack) == 0
 
 *********************************************************
 ##21. Merge Two Sorted Lists
@@ -328,3 +329,189 @@ class Solution:
     
 *********************************************************
 ##67. Add Binary
+class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        n_a = len(a)
+        n_b = len(b)
+        dif = abs(n_a - n_b)
+        if n_a >= n_b:
+            b = ('0'*dif) + b
+        else:
+            a = ('0'*dif) + a
+            
+        up = 0
+        i = len(a) - 1
+        r = ''
+
+        while i >= 0:
+            sum = int(a[i]) + int(b[i]) + up
+            if sum <= 1:
+                r = str(sum) + r
+                up = 0
+            else:
+                r = str(sum-2) + r
+                up = 1  
+            i -= 1
+        
+        if up == 1:
+            return '1' + r
+        else:
+            return r
+        
+*********************************************************
+##69. Sqrt(x)
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        left = 0
+        right = x
+        
+        if x == 1:
+            return 1
+
+        while right - left > 1:
+            mid = (left + right) // 2
+            
+            if mid * mid == x:
+                return mid
+                break
+            elif mid * mid > x:
+                right = mid
+            else:
+                left = mid
+            
+        return left
+    
+*********************************************************
+##70. Climbing Stairs
+'''
+Fibonacci Series
+
+For climbing at n-th stairs, we can climb from (n-1)-th stairs with 1 step OR (n-2)-th stairs with 2 step.
+Thus #n = #(n-1) + #(n-2)
+'''
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        num = [1,2]
+        for i in range(2,n):
+            num.append(num[i-1] + num[i-2])  
+        return num[n-1]
+    
+*********************************************************
+##83. Remove Duplicates from Sorted List
+'''
+Traverse the list recursively from the head (or start) to end and after completion of recursion calls, 
+compare the next node(returned node) and current node(head). 
+If data of both nodes are equal then return the next (head-> next) node,
+else return the current node(head).
+'''
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        
+        if not head or not head.next:
+            return head
+        
+        if head.val == head.next.val:
+            return self.deleteDuplicates(head.next)
+        else: 
+            head.next = self.deleteDuplicates(head.next)
+            return head
+
+*********************************************************
+##88. Merge Sorted Array
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        for _ in range(len(nums1)-m):
+            nums1.pop(-1)
+        i, j = 0, 0
+        
+        while i < len(nums1) and j < n:
+            if nums1[i] > nums2[j]:
+                nums1.insert(i, nums2[j])
+                j += 1
+            i += 1
+        nums1.extend(nums2[j:])
+        
+*********************************************************
+##100. Same Tree
+##BFS
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution:
+    def BFS(self, s: TreeNode):
+        queue = [s]
+        order = []
+        
+        while queue:
+            node = queue.pop(0)
+            
+            if node:
+                order.append(node.val)
+                queue.append(node.left)
+                queue.append(node.right)
+            else:
+                order.append(node)
+        
+        return order
+    
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        return self.BFS(p) == self.BFS(q)
+    
+*********************************************************
+##101. Symmetric Tree
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        return self.left_BFS(root) == self.right_BFS(root)
+
+    def left_BFS(self, root: TreeNode) -> list:
+        queue = [root]
+        order = []
+        
+        while queue:
+            node = queue.pop(0)
+            if node:
+                order.append(node.val)
+                queue.append(node.left)
+                queue.append(node.right)
+            else:
+                order.append(node)
+        
+        return order
+    
+    def right_BFS(self, root: TreeNode) -> list:
+        queue = [root]
+        order = []
+        
+        while queue:
+            node = queue.pop(0)
+            if node:
+                order.append(node.val)
+                queue.append(node.right)
+                queue.append(node.left)
+            else:
+                order.append(node)
+        
+        return order
+
+#########################################
+##Recursive and Iterative
