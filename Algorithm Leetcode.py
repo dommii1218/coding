@@ -515,3 +515,30 @@ class Solution:
 
 #########################################
 ##Recursive and Iterative
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        def recur(left,right):
+            if not left and not right:return True
+            if left and right:
+                return left.val == right.val and recur(left.left,right.right) and recur(left.right,right.left)
+            else:
+                return False
+        return recur(root,root)
+    
+*********************************************************
+##104. Maximum Depth of Binary Tree
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution:
+    def maxDepth(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+        return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
+    
+*********************************************************
+##107. Binary Tree Level Order Traversal II
