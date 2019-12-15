@@ -2,6 +2,15 @@
 --LEFT JOIN
 
 --176. Second Highest Salary
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  RETURN (
+      # Write your MySQL query statement below.
+      SELECT MAX(e1.Salary)
+      FROM Employee e1
+      WHERE (N-1) = (SELECT COUNT(DISTINCT(e2.Salary)) FROM Employee e2 WHERE e1.Salary < e2.Salary)
+  );
+END
 
 --181. Employees Earning More Than Their Managers
 --SELF JOIN
