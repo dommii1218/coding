@@ -31,11 +31,9 @@ AND l1.Num = l2.Num AND l2.Num = l3.Num
 ************************************************************************************************************************
 --181. Employees Earning More Than Their Managers
 --SELF JOIN
-SELECT Employee
-FROM (SELECT a.Name AS Employee, a.Salary AS EmployeeSalary, b.Salary AS ManagerSalary 
-      FROM Employee a, Employee b 
-      WHERE a.ManagerId = b.Id) AS T
-WHERE EmployeeSalary > ManagerSalary
+SELECT e1.Name AS Employee
+FROM Employee e1, Employee e2
+WHERE e1.ManagerId = e2.Id AND e1.Salary > e2.Salary
                      
 ************************************************************************************************************************
 --182. Duplicate Emails
@@ -43,6 +41,15 @@ WHERE EmployeeSalary > ManagerSalary
 SELECT Email
 FROM Person
 GROUP BY Email
-HAVING COUNT(*) > 1;
+HAVING COUNT(*) > 1
+                     
+************************************************************************************************************************
+--183. Customers Who Never Order
+SELECT c.Name AS Customers
+FROM Customers c
+LEFT JOIN Orders o
+ON c.Id = o.CustomerId 
+WHERE o.Id IS NULL
+                     
 ************************************************************************************************************************
 --196. Delete Duplicate Emails
