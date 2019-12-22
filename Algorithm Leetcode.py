@@ -11,6 +11,39 @@ class Solution:
                 dict[target-nums[i]] = i
                 
 *********************************************************
+##2. Add Two Numbers
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if not l1 and not l2:
+            return None
+        else:
+            carry = 0
+            head = l3 = ListNode(0)
+            while l1 or l2:
+                
+                if not l1:
+                    l1 = ListNode(0)
+                if not l2:
+                    l2 = ListNode(0)
+
+                s = l1.val + l2.val + carry
+                l3.next = ListNode(s % 10)
+                carry = s//10
+                l1 = l1.next
+                l2 = l2.next
+                l3 = l3.next
+        
+        if carry > 0:
+            l3.next = ListNode(carry)
+        return head.next  
+    
+*********************************************************
 ##7. Reverse Integer
 class Solution:
     def reverse(self, x):
