@@ -44,6 +44,89 @@ class Solution:
         return head.next  
     
 *********************************************************
+##3. Longest Substring Without Repeating Characters
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        dic, max_str, head = dict(), 0, 0
+        for i in range(len(s)):
+            c = s[i]
+            if c in dic:
+                head = max(head, dic[c] + 1)
+            dic[c] = i
+            max_str = max(i - head + 1, max_str)
+        return max_str
+
+*********************************************************
+##4. Median of Two Sorted Arrays
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        n, m = len(nums1), len(nums2)
+        if n > m:
+            nums3 = nums1
+            nums1 = nums2
+            nums2 = nums3
+            n, m = len(nums1), len(nums2)
+        
+        left, right = 0, n
+        while left <= right:
+            p_x = (left + right) // 2
+            p_y = (n + m + 1) // 2 - p_x
+            
+            if p_x == 0:
+                x_leftmax = float('-inf')
+            else:
+                x_leftmax = nums1[p_x - 1]
+                
+            if p_x == n:
+                x_rightmin = float('inf')
+            else:
+                x_rightmin = nums1[p_x]
+                
+            if p_y == 0:
+                y_leftmax = float('-inf')
+            else:
+                y_leftmax = nums2[p_y - 1]
+                
+            if p_y == m:
+                y_rightmin = float('inf')
+            else:
+                y_rightmin = nums2[p_y]
+            
+            if x_leftmax <= y_rightmin and y_leftmax <= x_rightmin:
+                if (n + m) % 2 == 0:
+                    return (max(x_leftmax, y_leftmax) + min(x_rightmin, y_rightmin))/2
+                else:
+                    return max(x_leftmax, y_leftmax)
+            
+            elif x_leftmax > y_rightmin:
+                right = p_x - 1
+            else:
+                left = p_x + 1
+                
+*********************************************************
+##5. Longest Palindromic Substring
+##Expand Around Center
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        if not s or len(s) == 0: return ""
+        head = 0
+        tail = 0
+        for i in range(len(s)):
+            len1 = self.ExpandAroundCenter(s, i, i)
+            len2 = self.ExpandAroundCenter(s, i, i + 1)
+            max_len = max(len1, len2)
+            if max_len > tail - head + 1:
+                head = i - (max_len - 1) // 2
+                tail = i + max_len // 2
+        return s[head:(tail + 1)]
+        
+    def ExpandAroundCenter(self, s: str, left: int, right: int):
+        if not s or len(s) == 0: return 0
+        while left >= 0 and right < len(s) and s[left] == s[right]:    ##Pay attention to the symbols here.
+            left -= 1
+            right += 1
+        return right - left - 1
+*********************************************************
 ##7. Reverse Integer
 class Solution:
     def reverse(self, x):
