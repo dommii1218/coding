@@ -446,6 +446,21 @@ class Solution:
         return list(res)
     
 *********************************************************
+##19. Remove Nth Node From End of List
+class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        dummy = ListNode(0)
+        dummy.next = head
+        first = second = dummy
+        for i in range(n+1):
+            first = first.next
+        while first:
+            first = first.next
+            second = second.next
+        second.next = second.next.next
+        return dummy.next
+
+*********************************************************
 ##20. Valid Parentheses
 class Solution:
     def isValid(self, s: str) -> bool:
@@ -477,11 +492,11 @@ class ListNode:
 
 class Solution:
     def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
-        if l1 is None:
+        if not l1:
             return l2
-        if l2 is None: 
+        if not l2:
             return l1
-        if l1 is None and l2 is None:
+        if not l1 and not l2:
             return None
         
         if l1.val <= l2.val:
@@ -490,7 +505,6 @@ class Solution:
         else:
             dummy = ListNode(l2.val)
             dummy.next = self.mergeTwoLists(l1, l2.next)
-        
         return dummy
     
 *********************************************************
