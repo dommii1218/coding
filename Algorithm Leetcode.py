@@ -126,6 +126,28 @@ class Solution:
             left -= 1
             right += 1
         return right - left - 1
+    
+*********************************************************
+##6. ZigZag Conversion
+class Solution:
+    def convert(self, s: str, numRows: int) -> str:
+        if not s:
+            return ''
+        if numRows == 1:
+            return s
+        
+        building = ['']*numRows
+        floor = 0
+        step = 0
+        for i in s:
+            building[floor] += i
+            if floor == 0:
+                step = 1
+            elif floor == numRows - 1:
+                step = -1
+            floor += step
+        return ''.join(building)
+
 *********************************************************
 ##7. Reverse Integer
 class Solution:
@@ -141,19 +163,44 @@ class Solution:
 #########################################
 class Solution:
     def reverse(self, x: int) -> int:
-        if -2**31 <= x <= 2**31 - 1:
+        if - 2**31 <= x <= 2**31 - 1:
             sign = [-1, 1][x > 0]
-            right = 0
             left = abs(x)
+            right = 0
             while left:
-                right = right*10 + left%10
-                left = left//10
-            reverse = sign*right
-            if -2**31 <= reverse <= 2**31 - 1:
-                return reverse
-            else:
-                return 0
+                right = right * 10 + left % 10
+                left = left // 10
+            reverse = sign * right
+            return (- 2**31 <= reverse <= 2**31 - 1)*reverse
 
+*********************************************************
+##8. String to Integer (atoi)
+class Solution:
+    def myAtoi(self, str: str) -> int:
+        str = str.strip()
+        res = ''
+        if not str:
+            return 0
+        elif str[0] not in ('+', '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'):
+            return 0
+        elif str[0] in ('+', '-'):
+            for x in str[1:]:
+                if x in ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'):
+                    res += x
+                else:
+                    break
+            if str[0] == '-' and res != "0" and res != "":
+                res = str[0] + res
+        else:
+            for x in str:
+                if x in ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'):
+                    res += x
+                else:
+                    break
+        
+        if not res:
+             return 0
+        return max(min(2147483647, int(res)), -2147483648)
 *********************************************************
 ##9. Palindrome Number
 class Solution:
@@ -168,7 +215,96 @@ class Solution:
                 return True
         else:
             return False
+#########################################        
+class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if not x or x == 0:
+            return True
+        elif x < 0:
+            return False  
+        x_str = str(x)
+        if len(x_str) % 2 == 0:
+            left, right = len(x_str) // 2 - 1, len(x_str) // 2
+        else:
+            left, right = len(x_str) // 2, len(x_str) // 2
+        
+        while left > 0 and x_str[left] == x_str[right]:
+            left -= 1
+            right += 1
+            
+        if left == 0 and x_str[left] == x_str[right]:
+            return True
+        else:
+            return False
+        
+*********************************************************
+##10. Regular Expression Matching
+##Dynamyc Programming
+class Solution:
+    def isMatch(self, s: str, p: str) -> bool:
+        n = len(s)
+        m = len(p)
+        T = [[False for x in range(m+1)] for y in range(n+1)]
+        T[0][0] = True
+        for j in range(1,m+1):
+            if p[j-1] == '*':
+                T[0][j] = T[0][j-2]
+        
+        for i in range(1,n+1):
+            for j in range(1,m+1):
+                if s[i-1] == p[j-1] or p[j-1] == '.':
+                    T[i][j] = T[i-1][j-1]
+                elif p[j-1] == '*':
+                    T[i][j] = T[i][j-2]
+                    if s[i-1] == p[j-2] or p[j-2] == '.':
+                        T[i][j] = T[i][j] or T[i-1][j]
+        
+        return T[n][m]
 
+*********************************************************
+##11. Container With Most Water
+##Two Pointer Approach
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        max_Area = 0
+        left = 0
+        right = len(height) - 1
+        while left < right:
+            max_Area = max(max_Area, min(height[left], height[right]) * (right - left))
+            if height[left] < height[right]:
+                left += 1
+            else:
+                right -= 1
+        
+        return max_Area
+*********************************************************
+##12. Integer to Roman
+class Solution:
+    def intToRoman(self, num: int) -> str:
+        roman_dic = {1:'I', 5:'V', 10:'X', 50:'L', 100:'C', 500:'D', 1000:'M'}
+        digit_dic = {1:[1],
+                     2:[1,1],
+                     3:[1,1,1],
+                     4:[1,5],
+                     5:[5],
+                     6:[5,1],
+                     7:[5,1,1],
+                     8:[5,1,1,1],
+                     9:[1,10]}
+        
+        r = ''
+        
+        for x in [1000,100,10,1]:
+            digit = num//x
+            num %= x
+            if digit == 0:
+                continue
+            else:
+                for i in digit_dic[digit]:
+                    r += roman_dic[i*x]
+        
+        return r
+   
 *********************************************************
 ##13. Roman to Integer
 class Solution:
@@ -191,43 +327,145 @@ class Solution:
 ##14. Longest Common Prefix
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
-        
-        n = len(strs)
-        
         min_str = min(strs, key = len, default = "")    ##which.min
         min_len = len(min_str)
 
         i = 0
         prefix = ""
         while i < min_len:
-            if all(items[i] == min_str[i] for items in strs) == False:
+            if not all(items[i] == min_str[i] for items in strs):
                 break
-            prefix = prefix + min_str[i]
+            prefix += min_str[i]
             i += 1
                     
         return prefix
     
 *********************************************************
+##15. 3Sum
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        if len(nums) < 3 or not nums:
+            return None
+        
+        res = set()
+        nums.sort()
+        for i in range(len(nums)):
+            if nums[i] > 0:
+                break
+            elif i > 0 and nums[i] == nums[i-1]:
+                continue
+            else:
+                l = i + 1
+                r = len(nums) - 1
+                while l < r:
+                    if nums[i] + nums[l] + nums[r] == 0:
+                        res.add((nums[i], nums[l], nums[r]))
+                        l += 1
+                        r -= 1
+                    elif nums[i] + nums[l] + nums[r] > 0:
+                        r -= 1
+                    else:
+                        l += 1
+        return res
+    
+*********************************************************
+##16. 3Sum Closest
+class Solution:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        if len(nums) < 3 or not nums:
+            return None
+        nums.sort()
+        res = sum(nums[:3])
+        min_abs_diff = abs(res-target)
+        for i in range(len(nums)):
+            l = i + 1
+            r = len(nums) - 1
+            while l < r:
+                sums =  nums[i] + nums[l] + nums[r]
+                diff = sums - target
+                if diff == 0:
+                    return target
+                elif diff < 0:
+                    l += 1
+                else:
+                    r -= 1
+                if abs(diff) < min_abs_diff:
+                    res = sums
+                    min_abs_diff = abs(diff)
+        return res
+    
+*********************************************************
+##17. Letter Combinations of a Phone Number
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        dic = {'2':['a','b','c'],
+               '3':['d','e','f'],
+               '4':['g','h','i'],
+               '5':['j','k','l'],
+               '6':['m','n','o'],
+               '7':['p','q','r','s'],
+               '8':['t','u','v'],
+               '9':['w','x','y','z']}
+        
+        res = []
+        def backtrack(combn, next_digits):
+            if not next_digits:
+                res.append(combn)
+            else:
+                for i in dic[next_digits[0]]:
+                    backtrack(combn + i, next_digits[1:])
+
+        if not digits:
+            return ''
+        else:
+            backtrack('',digits)
+            return res
+        
+*********************************************************
+##18. 4Sum
+class Solution:
+    def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
+        if not nums or len(nums) < 4:
+            return None
+        
+        res = set()
+        nums.sort()
+        for i in range(len(nums)):
+            for j in range(i+1,len(nums)):
+                l = j + 1
+                r = len(nums)-1
+                while l < r:
+                    if nums[i] + nums[j] + nums[l] + nums[r] == target:
+                        res.add((nums[i],nums[j],nums[l],nums[r]))
+                        l += 1
+                        r -= 1
+                    elif nums[i] + nums[j] + nums[l] + nums[r] > target:
+                        r -= 1
+                    else:
+                        l += 1
+        return list(res)
+    
+*********************************************************
 ##20. Valid Parentheses
 class Solution:
     def isValid(self, s: str) -> bool:
-        stack = []
-        dic = {")":"(", "]":"[","}":"{"}
-        left = ["(", "[", "{"]
+        dic = {')':'(', '}':'{', ']':'['}
         
         if len(s) % 2 != 0:
             return False
-        else:
-            for i in range(len(s)):
-                if s[i] in left:
-                    stack.append(s[i])
-                else:
-                    if dic[s[i]] not in stack or dic[s[i]] != stack[-1]:
-                        return False
-                    else:
-                        stack.pop(-1)
-            
-            return len(stack) == 0
+        if not s:
+            return True
+        
+        stack, i = [], 0
+        for i in range(len(s)):
+            if s[i] in dic.values():
+                stack.append(s[i])
+            elif dic[s[i]] not in stack or dic[s[i]] != stack[-1]:
+                return False
+            else:
+                stack.pop(-1)
+                
+        return len(stack) == 0
 
 *********************************************************
 ##21. Merge Two Sorted Lists
