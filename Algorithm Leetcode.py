@@ -506,6 +506,54 @@ class Solution:
             dummy = ListNode(l2.val)
             dummy.next = self.mergeTwoLists(l1, l2.next)
         return dummy
+            
+#########################################
+class Solution:
+    def merge2Lists(self, l1, l2):
+        head = point = ListNode(0)
+        while l1 and l2:
+            if l1.val <= l2.val:
+                point.next = l1
+                l1 = l1.next
+            else:
+                point.next = l2
+                l2 = l1
+                l1 = point.next.next
+            point = point.next
+        if not l1:
+            point.next=l2
+        else:
+            point.next=l1
+        return head.next
+    
+*********************************************************
+##23. Merge k Sorted Lists
+##Merge and Conquer
+class Solution:
+    def mergeKLists(self, lists: List[ListNode]) -> ListNode:
+        amount = len(lists)
+        interval = 1
+        while interval < amount:
+            for i in range(0, amount - interval, 2 * interval):
+                lists[i] = self.merge2Lists(lists[i], lists[i+interval])
+            interval *= 2
+        return lists[0] if lists else None
+        
+    def merge2Lists(self, l1: ListNode, l2:ListNode):
+        if not l1:
+            return l2
+        if not l2:
+            return l1
+        if not l1 and not l2:
+            return None
+        
+        if l1.val <= l2.val:
+            dummy = ListNode(l1.val)
+            dummy.next = self.merge2Lists(l1.next, l2)
+        else:
+            dummy = ListNode(l2.val)
+            dummy.next = self.merge2Lists(l1, l2.next)
+        return dummy
     
 *********************************************************
 ##26. Remove Duplicates from Sorted Array
@@ -611,6 +659,34 @@ class Solution:
                     i += 1
             
         return -1
+
+*********************************************************
+##31. Next Permutation:
+class Solution:
+    def nextPermutation(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        switch = -1
+        n = len(nums)
+        for i in range(n-2, switch, -1):
+            if nums[i] < nums[i+1]:
+                switch = i
+                break
+                
+        if switch == -1:
+            return nums.sort()
+        
+        j = n-1
+        for i in range(switch+1,n):
+            if nums[i] <= nums[switch]:
+                j = i-1
+                break
+
+        nums[j], nums[switch] = nums[switch], nums[j]
+        nums[switch+1:] = [nums[i] for i in range(n-1,switch,-1)]
+        
+        return nums
     
 *********************************************************
 ##35. Search Insert Position
