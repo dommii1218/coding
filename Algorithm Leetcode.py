@@ -661,6 +661,36 @@ class Solution:
         return -1
 
 *********************************************************
+##29. Divide Two Integers
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        MIN_VALUE = - 2 ** 31
+        MAX_VALUE = 2 ** 31 - 1
+        sign = 1
+        res = 0
+        if divisor == 0:
+            return MAX_VALUE
+        if dividend == MIN_VALUE and divisor == -1:
+            return MAX_VALUE
+        
+        if dividend < 0:
+            dividend = - dividend
+            sign = - sign
+        if divisor < 0:
+            divisor = - divisor
+            sign = - sign
+        
+        while dividend >= divisor:
+            shift = 0
+            while dividend >= (divisor << shift):
+                shift += 1
+            res += (1 << (shift - 1))
+            dividend -= (divisor << (shift - 1))
+        
+        res *= sign
+        return res if MIN_VALUE <= res <= MAX_VALUE else MIN_VALUE
+                
+*********************************************************
 ##31. Next Permutation:
 class Solution:
     def nextPermutation(self, nums: List[int]) -> None:
