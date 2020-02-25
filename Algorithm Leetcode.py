@@ -719,6 +719,33 @@ class Solution:
         return nums
     
 *********************************************************
+##33. Search in Rotated Sorted Array
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        if not nums:
+            return -1
+        
+        left = 0
+        right = len(nums) - 1
+        while left + 1 < right:    ##judging criteria is left + 1 < right
+            mid = left + (right - left) // 2    ##To prevent overflow.
+            if nums[mid] == target: return mid
+            if nums[left] < nums[mid]:
+                if nums[left] <= target <= nums[mid]:
+                    right = mid
+                else:
+                    left = mid
+            if nums[mid] < nums[right]:
+                if nums[mid] <= target <= nums[right]:
+                    left = mid
+                else:
+                    right = mid
+            
+        ##Combine the while loop "while left + 1 < right: ", to prevent endless loop
+        if nums[left] == target: return left
+        elif nums[right] == target: return right
+        else: return -1
+*********************************************************
 ##35. Search Insert Position
 class Solution:
     def searchInsert(self, nums: List[int], target: int) -> int:
