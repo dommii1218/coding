@@ -1,3 +1,5 @@
+//Programming Exercise: Advanced Modifying Images
+//Part 3
 var img = new SimpleImage('smallpanda.png');
 
 function setBlack(px){
