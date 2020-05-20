@@ -1,7 +1,7 @@
 import edu.duke.*;
 import org.apache.commons.csv.*;
 
-public class CSVAssignment {
+public class CSVAssignment1 {
     public String countryInfo(CSVParser parser, String country){
         for (CSVRecord record: parser){
             String countryinfo = record.get("Country");
@@ -49,16 +49,18 @@ public class CSVAssignment {
     public void tester(){
         FileResource fr = new FileResource();
         CSVParser parser = fr.getCSVParser();
-        System.out.println(countryInfo(parser, "Germany"));
+        System.out.println("Country Info: " + countryInfo(parser, "Nauru"));
         
         parser = fr.getCSVParser();
+        System.out.println("Two Products Exporters: ");
         listExportersTwoProducts(parser, "gold", "diamonds");
         
         parser = fr.getCSVParser();
-        System.out.println(numberOfExporters(parser, "gold"));
+        System.out.println("Number of Exporters： " + numberOfExporters(parser, "sugar"));
         
         parser = fr.getCSVParser();
-        bigExporters(parser, "$999,999,999");
+        System.out.println("Big Exporters: ");
+        bigExporters(parser, "$999,999,999,999");
     }
 
 }
