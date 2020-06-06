@@ -23,7 +23,7 @@ public class WordLengths {
         }
     }
     
-        public int indexOfMax(int[] values){
+    public int indexOfMax(int[] values){
         int maxCount = 0;
         int maxIndex = 0;
         for (int k=0; k<values.length; k++){
