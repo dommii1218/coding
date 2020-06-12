@@ -1,4 +1,4 @@
-# Leetcode Coding EveryDay
+# Leetcode Coding
 To record coding everyday.
 
 |#|Title|Difficulty|
