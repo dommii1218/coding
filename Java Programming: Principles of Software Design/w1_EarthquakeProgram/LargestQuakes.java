@@ -1,11 +1,5 @@
 import java.util.*;
 
-/**
- * Write a description of LargestQuakes here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class LargestQuakes {
     public void findLargestQuakes(){
         EarthQuakeParser parser = new EarthQuakeParser();
