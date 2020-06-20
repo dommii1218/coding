@@ -1,11 +1,5 @@
 import java.util.*;
 
-/**
- * Write a description of EarthQuakeClient2 here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class EarthQuakeClient2 {
     public ArrayList<QuakeEntry> filter(ArrayList<QuakeEntry>quakeData,
                                         Filter f){
