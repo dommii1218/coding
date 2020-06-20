@@ -1,0 +1,29 @@
+public class PhraseFilter implements Filter {
+    private String where;
+    private String phrase;
+    
+    public PhraseFilter(String where, String phrase){
+        this.where = where;
+        this.phrase = phrase;
+    }
+    
+    public boolean satisfies(QuakeEntry qe){
+        if (where.equals("start")){
+            if (qe.getInfo().indexOf(phrase) == 0) {return true;}
+        }
+        else if (where.equals("any")){
+            return qe.getInfo().indexOf(phrase) != -1;
+        }
+        else if (where.equals("end")){
+            String info = qe.getInfo();
+            if (info.lastIndexOf(phrase) == info.length() - phrase.length()){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public String getName(){
+        return "PhraseFilter";
+    }
+}
