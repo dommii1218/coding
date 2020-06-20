@@ -1,12 +1,6 @@
 import java.util.*;
 import edu.duke.*;
 
-/**
- * Write a description of ClosestQuakes here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class ClosestQuakes {
     
     public ArrayList<QuakeEntry> getClosest(ArrayList<QuakeEntry> quakeData, Location current, int howMany){
